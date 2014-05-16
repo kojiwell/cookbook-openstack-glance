@@ -54,7 +54,7 @@ template "/etc/glance/glance-api.conf" do
     :rabbit_password => rabbit_password,
     :rabbit_virtual_host => rabbit_virtual_host
   )
-  notifies :restart, "service[glance-api]"
+  notifies :restart, "service[glance-api]", :immediately
 end
 
 service "glance-api" do
@@ -77,7 +77,7 @@ template "/etc/glance/glance-registry.conf" do
     :openstack_mysql_host => openstack_mysql_host,
     :glance_db => glance_db
   )
-  notifies :restart, "service[glance-registry]"
+  notifies :restart, "service[glance-registry]", :immediately
 end
 
 service "glance-registry" do
@@ -91,9 +91,9 @@ execute "glance_manage_db_sync" do
   command "glance-manage db_sync && touch /etc/glance/.db_synced_do_not_delete"
   creates "/etc/glance/.db_synced_do_not_delete"
   action :run
-	notifies :restart, "service[glance-api]"
-  notifies :restart, "service[glance-registry]"
-  notifies :run, "script[register_ubuntu1404]"
+	notifies :restart, "service[glance-api]", :immediately
+  notifies :restart, "service[glance-registry]", :immediately
+  notifies :run, "script[register_ubuntu1404]", :immediately
 end
 
 script "register_ubuntu1404" do

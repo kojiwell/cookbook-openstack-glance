@@ -93,7 +93,7 @@ execute "glance_manage_db_sync" do
   action :run
 	notifies :restart, "service[glance-api]"
   notifies :restart, "service[glance-registry]"
-  notifies :restart, "script[register_ubuntu1404]"
+  notifies :run, "script[register_ubuntu1404]"
 end
 
 script "register_ubuntu1404" do
@@ -108,5 +108,5 @@ script "register_ubuntu1404" do
   touch /etc/glance/.register_ubuntu1404_do_not_delete
   EOH
   creates "/etc/glance/.register_ubuntu1404_do_not_delete"
-  action :run
+  action :nothing
 end
